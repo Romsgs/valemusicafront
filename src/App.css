@@ -1,0 +1,58 @@
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar em telas grandes */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #2d3748;
+  color: white;
+  padding: 16px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Conteúdo principal */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ajuste da Navbar */
+.navbar {
+  background-color: #1a202c;
+  color: white;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Menu hambúrguer */
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+
+/* Ajuste para telas menores */
+@media (max-width: 768px) {
+  /* Ocultar Sidebar em telas pequenas */
+  /* .sidebar.hidden {
+    transform: translateX(-100%);
+  } */
+  .hamburger {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 200px;
+    z-index: 1000;
+    background-color: #2d3748;
+  }
+}
