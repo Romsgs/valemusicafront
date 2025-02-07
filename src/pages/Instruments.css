@@ -1,0 +1,12 @@
+.listaInstrumentos {
+  list-style: none;
+  padding-left: 5px;
+}
+
+.listaInstrumentos:nth-child(odd) {
+  background-color: beige;
+}
+
+.listaInstrumentos:nth-child(even) {
+  background-color: aliceblue;
+}
