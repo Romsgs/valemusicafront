@@ -18,21 +18,23 @@ export function Users() {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
 
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const response = await apiService.getUsers();
-        if (Array.isArray(response.data)) {
-          setUsers(response.data);
-        } else {
-          console.error("Erro: Resposta da API não é um array", response.data);
-          setUsers([]);
-        }
-      } catch (error) {
-        console.error("Erro ao buscar usuários:", error);
+  // Função para buscar usuários
+  const fetchUsers = async () => {
+    try {
+      const response = await apiService.getUsers();
+      if (Array.isArray(response.data)) {
+        setUsers(response.data);
+      } else {
+        console.error("Erro: Resposta da API não é um array", response.data);
         setUsers([]);
       }
+    } catch (error) {
+      console.error("Erro ao buscar usuários:", error);
+      setUsers([]);
     }
+  };
+
+  useEffect(() => {
     fetchUsers();
   }, []);
 
@@ -65,7 +67,10 @@ export function Users() {
   return (
     <div className="users-container">
       <h1>Gerenciamento de Usuários</h1>
-      <button className="add-user-btn" onClick={() => handleOpenUserModal()}>
+      <button
+        className="add-user-btn"
+        onClick={() => handleOpenUserModal(null)}
+      >
         Adicionar Usuário
       </button>
       <div className="user-list">
@@ -94,10 +99,11 @@ export function Users() {
         </ul>
       </div>
 
-      {isUserModalOpen && selectedUser !== undefined && (
+      {isUserModalOpen && (
         <UserModal
           user={selectedUser}
           onClose={() => setIsUserModalOpen(false)}
+          onSave={fetchUsers} // Atualiza a lista de usuários após salvar
         />
       )}
       {isRoleModalOpen && selectedUser && (
