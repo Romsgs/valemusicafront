@@ -46,6 +46,22 @@ export function Users() {
     setIsRoleModalOpen(true);
   };
 
+  const handleDeleteUser = async (user: IUser) => {
+    if (!window.confirm(`Tem certeza que deseja excluir ${user.nome}?`)) return;
+
+    try {
+      await apiService.deleteUser(user.id);
+
+      // Atualiza a lista de usuários removendo o usuário excluído
+      setUsers(users.filter((u) => u.id !== user.id));
+
+      alert("Usuário excluído com sucesso!");
+    } catch (error) {
+      console.error("Erro ao excluir usuário:", error);
+      alert("Erro ao excluir usuário.");
+    }
+  };
+
   return (
     <div className="users-container">
       <h1>Gerenciamento de Usuários</h1>
@@ -65,6 +81,9 @@ export function Users() {
                   </button>
                   <button onClick={() => handleOpenRoleModal(user)}>
                     ✏ Dados pessoais
+                  </button>
+                  <button onClick={() => handleDeleteUser(user)}>
+                    ❌ Excluir
                   </button>
                 </div>
               </li>
