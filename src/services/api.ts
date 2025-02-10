@@ -2,6 +2,7 @@ import axios from "axios";
 
 // Definição da URL base da API
 const API_BASE_URL = "https://valemusica.onrender.com"; // Altere conforme necessário
+// const API_BASE_URL = "http://localhost:3000"; // Altere conforme necessário
 
 // Configuração do Axios
 const api = axios.create({

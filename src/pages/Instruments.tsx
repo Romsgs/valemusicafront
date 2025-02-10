@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { apiService } from "../services/api";
 import React from "react";
 import "./Instruments.css";
+
 export function Instruments() {
   const [instruments, setInstruments] = useState([]);
   const [tipo, setTipo] = useState("");
@@ -26,6 +27,11 @@ export function Instruments() {
 
   // Criar um novo instrumento
   const handleCreateInstrument = async () => {
+    if (!tipo || !tamanho || !numero || !condicao) {
+      alert("Preencha todos os campos obrigatórios!");
+      return;
+    }
+
     try {
       const novoInstrumento = {
         tipo,
@@ -42,6 +48,13 @@ export function Instruments() {
       // Atualizar lista de instrumentos
       const response = await apiService.getInstrumentos();
       setInstruments(response.data);
+
+      // Limpar os campos após o cadastro
+      setTipo("");
+      setTamanho("");
+      setNumero("");
+      setCondicao("");
+      setObservacao("");
     } catch (error) {
       console.error("Erro ao criar instrumento:", error);
     }
@@ -65,11 +78,11 @@ export function Instruments() {
   };
 
   return (
-    <div>
+    <div className="instruments-container">
       <h1>Gerenciamento de Instrumentos</h1>
 
       {/* Formulário de Cadastro */}
-      <div>
+      <div className="instrument-form">
         <h2>Adicionar Novo Instrumento</h2>
         <input
           type="text"
@@ -97,26 +110,39 @@ export function Instruments() {
         />
         <input
           type="text"
-          placeholder="Observação"
+          placeholder="Observação (Opcional)"
           value={observacao}
           onChange={(e) => setObservacao(e.target.value)}
         />
-        <button onClick={handleCreateInstrument}>Cadastrar Instrumento</button>
+        <button onClick={handleCreateInstrument}>
+          ➕ Cadastrar Instrumento
+        </button>
       </div>
 
       {/* Listagem de Instrumentos */}
-      <div>
+      <div className="instrument-list">
         <h2>Lista de Instrumentos</h2>
         <ul>
-          {instruments.map((instrument: any) => (
-            <li key={instrument.id} className="listaInstrumentos">
-              {instrument.numero} - {instrument.tipo} - {instrument.tamanho} -{" "}
-              {instrument.condicao}
-              <button onClick={() => handleDeleteInstrument(instrument.id)}>
-                Excluir
-              </button>
-            </li>
-          ))}
+          {instruments.length > 0 ? (
+            instruments.map((instrument: any) => (
+              <li key={instrument.id} className="instrument-item">
+                <div className="instrument-item_container">
+                  {instrument.numero} - {instrument.tipo} - {instrument.tamanho}{" "}
+                  - {instrument.condicao}
+                </div>
+                <button
+                  className="button-instruments"
+                  onClick={() => handleDeleteInstrument(instrument.id)}
+                >
+                  ❌ Excluir
+                </button>
+              </li>
+            ))
+          ) : (
+            <p style={{ textAlign: "center", color: "#666" }}>
+              Nenhum instrumento encontrado.
+            </p>
+          )}
         </ul>
       </div>
     </div>

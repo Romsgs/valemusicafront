@@ -10,6 +10,7 @@ export interface IUser {
   nome: string;
   email: string;
   role: string;
+  cpf: string;
 }
 
 export function Users() {
@@ -17,6 +18,10 @@ export function Users() {
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   // Função para buscar usuários
   const fetchUsers = async () => {
@@ -34,10 +39,6 @@ export function Users() {
     }
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const handleOpenUserModal = (user: IUser | null = null) => {
     setSelectedUser(user);
     setIsUserModalOpen(true);
@@ -53,10 +54,7 @@ export function Users() {
 
     try {
       await apiService.deleteUser(user.id);
-
-      // Atualiza a lista de usuários removendo o usuário excluído
       setUsers(users.filter((u) => u.id !== user.id));
-
       alert("Usuário excluído com sucesso!");
     } catch (error) {
       console.error("Erro ao excluir usuário:", error);
@@ -71,16 +69,19 @@ export function Users() {
         className="add-user-btn"
         onClick={() => handleOpenUserModal(null)}
       >
-        Adicionar Usuário
+        ➕ Adicionar Usuário
       </button>
+
       <div className="user-list">
         <h2>Lista de Usuários</h2>
         <ul>
           {users.length > 0 ? (
             users.map((user) => (
               <li key={user.id}>
-                {user.nome} - {user.email} ({user.role})
-                <div>
+                <div className="user-info">
+                  {user.nome.split(" ").slice(0, 2).join(" ")} ({user.role})
+                </div>
+                <div className="user-buttons">
                   <button onClick={() => handleOpenUserModal(user)}>
                     ✏ Dados principais
                   </button>
